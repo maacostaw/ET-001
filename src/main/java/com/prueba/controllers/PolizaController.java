@@ -1,15 +1,13 @@
 package com.prueba.controllers;
 
 import com.prueba.dtos.PolizaDTO;
+import com.prueba.dtos.RiesgoDTO;
 import com.prueba.enums.EstadoPoliza;
 import com.prueba.enums.TipoPoliza;
 import com.prueba.services.PolizaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,5 +28,23 @@ public class PolizaController {
             ) {
         List<PolizaDTO> polizas = this.polizaService.getByEstadoYTipo(tipo, estado);
         return ResponseEntity.status(HttpStatus.OK).body(polizas);
+    }
+
+    @GetMapping("/{id}/riesgos")
+    public ResponseEntity<List<RiesgoDTO>> getRiesgos(@PathVariable Long id) {
+        List<RiesgoDTO> riesgos = this.polizaService.getRiesgos(id);
+        return ResponseEntity.status(HttpStatus.OK).body(riesgos);
+    }
+
+    @PostMapping("/{id}/renovar")
+    public ResponseEntity<PolizaDTO> renovar(@PathVariable Long id) {
+        PolizaDTO polizaRenovada = polizaService.renovar(id);
+        return ResponseEntity.status(HttpStatus.OK).body(polizaRenovada);
+    }
+
+    @PostMapping("/{id}/cancelar")
+    public ResponseEntity<PolizaDTO> cancelar(@PathVariable Long id) {
+        PolizaDTO polizaCancelada = polizaService.cancelar(id);
+        return ResponseEntity.status(HttpStatus.OK).body(polizaCancelada);
     }
 }

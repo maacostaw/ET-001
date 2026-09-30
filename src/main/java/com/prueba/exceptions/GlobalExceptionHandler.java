@@ -14,6 +14,26 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(ReglaDeNegocioException.class)
+    public ResponseEntity<Map<String, Object>> ReglaDeNegocioHandler(ReglaDeNegocioException e) {
+        Map<String, Object> response = new HashMap<>();
+        HttpStatus status = HttpStatus.CONFLICT;
+        response.put("Timestamp", LocalDateTime.now());
+        response.put("Status", status);
+        response.put("Message", e.getMessage());
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @ExceptionHandler(RecursoNoEncontradoException.class)
+    public ResponseEntity<Map<String, Object>> RecursoNoEncontradoHandler(RecursoNoEncontradoException e){
+        Map<String, Object> response = new HashMap<>();
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        response.put("Timestamp", LocalDateTime.now());
+        response.put("Status", status);
+        response.put("Message", e.getMessage());
+        return ResponseEntity.status(status).body(response);
+    }
+
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<Map<String, Object>> typeMismatchHandler(MethodArgumentTypeMismatchException e) {
         String mensaje = "Valor inválido '" + e.getValue() + "' para el parámetro '" + e.getName() + "'";
