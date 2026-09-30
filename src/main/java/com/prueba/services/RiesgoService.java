@@ -1,5 +1,6 @@
 package com.prueba.services;
 
+import com.prueba.clients.CoreClient;
 import com.prueba.dtos.RiesgoDTO;
 import com.prueba.entities.RiesgoEntity;
 import com.prueba.enums.EstadoRiesgo;
@@ -15,10 +16,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class RiesgoService {
     private final RiesgoRepository riesgoRepository;
     private final ModelMapper modelMapper;
+    private CoreClient coreClient;
 
-    public RiesgoService(RiesgoRepository riesgoRepository, ModelMapper modelMapper) {
+    public RiesgoService(
+            RiesgoRepository riesgoRepository,
+            ModelMapper modelMapper,
+            CoreClient coreClient
+    ) {
         this.riesgoRepository = riesgoRepository;
         this.modelMapper = modelMapper;
+        this.coreClient = coreClient;
     }
 
     // Requerimiento 6
@@ -37,6 +44,10 @@ public class RiesgoService {
 
         riesgo.setEstadoRiesgo(EstadoRiesgo.CANCELADO);
         RiesgoEntity guardado = riesgoRepository.save(riesgo);
+
+        //Notificación al core client
+        coreClient.notificar(guardado.getPolizaEntity().getId());
+
         return modelMapper.map(guardado, RiesgoDTO.class);
     }
 }

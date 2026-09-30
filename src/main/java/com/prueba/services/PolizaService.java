@@ -1,5 +1,6 @@
 package com.prueba.services;
 
+import com.prueba.clients.CoreClient;
 import com.prueba.dtos.PolizaDTO;
 import com.prueba.dtos.RiesgoDTO;
 import com.prueba.dtos.RiesgoRequestDTO;
@@ -29,16 +30,19 @@ public class PolizaService {
 
     private ModelMapper modelMapper;
     private BigDecimal ipc;
+    private CoreClient coreClient;
 
     public PolizaService(PolizaRepository polizaRepository,
                          ModelMapper modelMapper,
                          RiesgoRepository riesgoRepository,
-                         @Value("${poliza.ipc}") BigDecimal ipc
+                         @Value("${poliza.ipc}") BigDecimal ipc,
+                         CoreClient coreClient
     ) {
         this.polizaRepository = polizaRepository;
         this.riesgoRepository = riesgoRepository;
         this.modelMapper = modelMapper;
         this.ipc = ipc;
+        this.coreClient = coreClient;
     }
 
     // Requerimiento 1
@@ -82,6 +86,10 @@ public class PolizaService {
         poliza.setEstadoPoliza(EstadoPoliza.RENOVADA);
 
         PolizaEntity guardada = polizaRepository.save(poliza);
+
+        //Notificación al core client
+        coreClient.notificar(guardada.getId());
+
         return modelMapper.map(guardada, PolizaDTO.class);
     }
 
@@ -102,6 +110,10 @@ public class PolizaService {
         riesgoRepository.saveAll(riesgos);
 
         PolizaEntity guardada = polizaRepository.save(poliza);
+
+        //Notificación al core client
+        coreClient.notificar(guardada.getId());
+
         return modelMapper.map(guardada, PolizaDTO.class);
     }
 
@@ -120,6 +132,10 @@ public class PolizaService {
 
         RiesgoEntity riesgo = new RiesgoEntity(poliza, request.getAsegurado(), request.getBeneficiario());
         RiesgoEntity guardado = riesgoRepository.save(riesgo);
+
+        //Notificación al core client
+        coreClient.notificar(guardado.getId());
+
         return modelMapper.map(guardado, RiesgoDTO.class);
     }
 }

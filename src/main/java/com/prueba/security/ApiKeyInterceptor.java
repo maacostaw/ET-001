@@ -12,11 +12,11 @@ import java.security.MessageDigest;
 
 @Component
 public class ApiKeyInterceptor implements HandlerInterceptor {
-    private static final String HEADER = "api-key";
+    private static final String HEADER = "x-api-key";
 
     private final byte[] apiKey;
 
-    public ApiKeyInterceptor(@Value("${api.key}") String apiKey) {
+    public ApiKeyInterceptor(@Value("${x.api.key}") String apiKey) {
         this.apiKey = apiKey.getBytes(StandardCharsets.UTF_8);
     }
 
