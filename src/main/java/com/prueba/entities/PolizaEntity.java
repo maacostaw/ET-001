@@ -26,9 +26,9 @@ public class PolizaEntity {
 
     }
 
-    public PolizaEntity(TipoPoliza tipoPoliza, EstadoPoliza estadoPoliza, LocalDateTime fechaInicio, LocalDateTime fechaFin, Integer canon, BigDecimal prima, String tomador) {
+    public PolizaEntity(TipoPoliza tipoPoliza, LocalDateTime fechaInicio, LocalDateTime fechaFin, Integer canon, BigDecimal prima, String tomador) {
         this.tipoPoliza = tipoPoliza;
-        this.estadoPoliza = estadoPoliza;
+        this.estadoPoliza = EstadoPoliza.ACTIVA;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.canon = canon;

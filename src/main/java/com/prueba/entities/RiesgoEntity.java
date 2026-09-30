@@ -20,9 +20,9 @@ public class RiesgoEntity {
 
     }
 
-    public RiesgoEntity(PolizaEntity polizaEntity, EstadoRiesgo estadoRiesgo, String beneficiario, String asegurado, Long id) {
+    public RiesgoEntity(PolizaEntity polizaEntity, String beneficiario, String asegurado) {
         this.polizaEntity = polizaEntity;
-        this.estadoRiesgo = estadoRiesgo;
+        this.estadoRiesgo = EstadoRiesgo.ACTIVO;
         this.beneficiario = beneficiario;
         this.asegurado = asegurado;
     }
