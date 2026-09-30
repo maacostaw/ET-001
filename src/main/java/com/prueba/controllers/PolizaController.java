@@ -2,9 +2,11 @@ package com.prueba.controllers;
 
 import com.prueba.dtos.PolizaDTO;
 import com.prueba.dtos.RiesgoDTO;
+import com.prueba.dtos.RiesgoRequestDTO;
 import com.prueba.enums.EstadoPoliza;
 import com.prueba.enums.TipoPoliza;
 import com.prueba.services.PolizaService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,5 +48,11 @@ public class PolizaController {
     public ResponseEntity<PolizaDTO> cancelar(@PathVariable Long id) {
         PolizaDTO polizaCancelada = polizaService.cancelar(id);
         return ResponseEntity.status(HttpStatus.OK).body(polizaCancelada);
+    }
+
+    @PostMapping("/{id}/riesgos")
+    public ResponseEntity<RiesgoDTO> agregarRiesgo(@PathVariable Long id,
+                                                   @Valid @RequestBody RiesgoRequestDTO request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(polizaService.agregarRiesgo(id, request));
     }
 }

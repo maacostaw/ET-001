@@ -2,6 +2,7 @@ package com.prueba.services;
 
 import com.prueba.dtos.PolizaDTO;
 import com.prueba.dtos.RiesgoDTO;
+import com.prueba.dtos.RiesgoRequestDTO;
 import com.prueba.entities.PolizaEntity;
 import com.prueba.entities.RiesgoEntity;
 import com.prueba.enums.EstadoPoliza;
@@ -102,5 +103,23 @@ public class PolizaService {
 
         PolizaEntity guardada = polizaRepository.save(poliza);
         return modelMapper.map(guardada, PolizaDTO.class);
+    }
+
+    //Requerimiento 5
+    @Transactional
+    public RiesgoDTO agregarRiesgo(Long polizaId, RiesgoRequestDTO request) {
+        PolizaEntity poliza = polizaRepository.findById(polizaId)
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe la póliza con id " + polizaId));
+
+        if (poliza.getTipoPoliza() != TipoPoliza.COLECTIVA) {
+            throw new ReglaDeNegocioException("Solo se pueden agregar riesgos a pólizas colectivas");
+        }
+        if (poliza.getEstadoPoliza() == EstadoPoliza.CANCELADA) {
+            throw new ReglaDeNegocioException("No se pueden agregar riesgos a una póliza cancelada");
+        }
+
+        RiesgoEntity riesgo = new RiesgoEntity(poliza, request.getAsegurado(), request.getBeneficiario());
+        RiesgoEntity guardado = riesgoRepository.save(riesgo);
+        return modelMapper.map(guardado, RiesgoDTO.class);
     }
 }
