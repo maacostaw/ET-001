@@ -15,7 +15,7 @@ public class PolizaDTO {
     private Integer canon;
     private BigDecimal prima;
     private String tomador;
-    
+
     public PolizaDTO() {
 
     }
