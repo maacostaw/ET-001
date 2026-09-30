@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/polizas")
+@RequestMapping("/polizas")
 public class PolizaController {
     private PolizaService polizaService;
 

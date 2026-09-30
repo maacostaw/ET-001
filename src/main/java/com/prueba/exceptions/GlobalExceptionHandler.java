@@ -14,6 +14,16 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(ApiKeyInvalidaException.class)
+    public ResponseEntity<Map<String, Object>> ApiKeyInvalidaHandler(ApiKeyInvalidaException e) {
+        Map<String, Object> response = new HashMap<>();
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        response.put("Timestamp", LocalDateTime.now());
+        response.put("Status", status);
+        response.put("Message", e.getMessage());
+        return ResponseEntity.status(status).body(response);
+    }
+
     @ExceptionHandler(ReglaDeNegocioException.class)
     public ResponseEntity<Map<String, Object>> ReglaDeNegocioHandler(ReglaDeNegocioException e) {
         Map<String, Object> response = new HashMap<>();
